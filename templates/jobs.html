@@ -1,43 +1,53 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>AI Recommended Jobs</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
-<div class="jobs-container">
+    <div class="container">
 
-    <h1>🤖 AI Recommended Jobs</h1>
+        <h1>AI Recommended Jobs</h1>
 
-    {% for job in jobs %}
+        <form method="POST">
 
-    <div class="job-card">
+            <input type="text"
+                   name="branch"
+                   placeholder="Enter Your Branch">
 
-        <h2>{{ job.title }}</h2>
+            <button type="submit">
+                Get Jobs
+            </button>
 
-        <a href="{{ job.link }}" target="_blank">
-            Apply Now
-        </a>
+        </form>
 
-        <br><br>
+        {% for job in jobs %}
 
-        <a href="/roadmap/{{ job.title }}">
-            View Roadmap
-        </a>
+        <div class="card">
+
+            <h2>{{ job }}</h2>
+
+            <a href="/roadmap/{{ job }}">
+                <button>
+                    View Roadmap
+                </button>
+            </a>
+
+        </div>
+
+        {% endfor %}
 
     </div>
 
-    {% endfor %}
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-    <br>
-
-    <a class="live-btn" href="/livejobs">
-        🌐 View Live Govt Jobs
-    </a>
-
-</div>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 </html>

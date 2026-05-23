@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Live Govt Jobs</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 
 <body>
 
-<div class="jobs-container">
+    <div class="container">
 
-    <h1>🌐 Live Government Jobs</h1>
+        <h1>Live Govt Jobs</h1>
 
-    {% for job in live_jobs %}
+        {% for job in jobs %}
 
-    <div class="job-card">
+        <div class="card">
 
-        <h2>{{ job.title }}</h2>
+            <h2>{{ job.title }}</h2>
 
-        <a href="{{ job.link }}" target="_blank">
-            Open Notification
-        </a>
+            <a href="{{ job.link }}" target="_blank">
+
+                <button>
+                    Apply Now
+                </button>
+
+            </a>
+
+        </div>
+
+        {% endfor %}
 
     </div>
 
-    {% endfor %}
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-</div>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 </html>
