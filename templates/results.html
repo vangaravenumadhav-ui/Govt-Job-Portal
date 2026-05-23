@@ -1,13 +1,39 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!DOCTYPE html>
+<html>
 
-<div class="container">
-    <h2>Recommended Jobs</h2>
+<head>
 
-    {% for job in jobs %}
-        <div style="background:#f9f9f9; padding:10px; margin:10px; border-radius:10px;">
-            <h3>{{ job.title }}</h3>
-            <p>{{ job.desc }}</p>
-            <a href="{{ job.link }}" target="_blank">Apply Now</a>
+    <title>Results</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>AI Recommended Jobs</h1>
+
+        {% for job in jobs %}
+
+        <div class="card">
+
+            <h2>{{ job }}</h2>
+
+            <a href="/roadmap/{{ job }}">
+                <button>View Roadmap</button>
+            </a>
+
         </div>
-    {% endfor %}
-</div>
+
+        {% endfor %}
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>

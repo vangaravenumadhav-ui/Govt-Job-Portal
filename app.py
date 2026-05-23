@@ -1,41 +1,40 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
-from werkzeug.security import generate_password_hash, check_password_hash
 from scraper import get_live_jobs
+from ai import recommend_jobs
 
 app = Flask(__name__)
-app.secret_key = "secret123"
+app.secret_key = "govtjobportal"
 
-
-# ================= DATABASE ================= #
+# ---------------- DATABASE ----------------
 
 def create_table():
-
     conn = sqlite3.connect("database.db")
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    cursor.execute("""
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT,
-        password TEXT,
-        age TEXT,
-        qualification TEXT,
-        branch TEXT
+        password TEXT
     )
     """)
 
     conn.commit()
     conn.close()
 
-
 create_table()
 
+# ---------------- LOGIN PAGE ----------------
 
-# ================= LOGIN ================= #
+@app.route("/")
+def home():
+    return render_template("login.html")
 
-@app.route("/", methods=["GET", "POST"])
-def login():
+# ---------------- REGISTER ----------------
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
 
     if request.method == "POST":
 
@@ -43,209 +42,87 @@ def login():
         password = request.form["password"]
 
         conn = sqlite3.connect("database.db")
-        cursor = conn.cursor()
+        cur = conn.cursor()
 
-        cursor.execute(
-            "SELECT * FROM users WHERE username=?",
-            (username,)
+        cur.execute(
+            "INSERT INTO users(username, password) VALUES (?, ?)",
+            (username, password)
         )
 
-        user = cursor.fetchone()
-
+        conn.commit()
         conn.close()
 
-        if user and check_password_hash(user[2], password):
-
-            session["username"] = username
-
-            return redirect("/jobs")
-
-        else:
-            return "Invalid Login ❌"
-
-    return render_template("login.html")
-
-
-# ================= REGISTER ================= #
-
-@app.route("/register", methods=["GET", "POST"])
-def register():
-
-    if request.method == "POST":
-
-        try:
-
-            username = request.form["username"]
-
-            password = generate_password_hash(
-                request.form["password"]
-            )
-
-            age = request.form["age"]
-
-            qualification = request.form["qualification"]
-
-            branch = request.form["branch"]
-
-            conn = sqlite3.connect("database.db")
-            cursor = conn.cursor()
-
-            cursor.execute("""
-            INSERT INTO users(
-                username,
-                password,
-                age,
-                qualification,
-                branch
-            )
-            VALUES(?,?,?,?,?)
-            """, (
-                username,
-                password,
-                age,
-                qualification,
-                branch
-            ))
-
-            conn.commit()
-            conn.close()
-
-            return redirect("/")
-
-        except Exception as e:
-            return f"Database Error: {e}"
+        return redirect("/")
 
     return render_template("register.html")
 
+# ---------------- LOGIN ----------------
 
-# ================= AI JOBS ================= #
+@app.route("/login", methods=["POST"])
+def login():
 
-@app.route("/jobs")
-def jobs():
-
-    if "username" not in session:
-        return redirect("/")
-
-    username = session["username"]
+    username = request.form["username"]
+    password = request.form["password"]
 
     conn = sqlite3.connect("database.db")
-    cursor = conn.cursor()
+    cur = conn.cursor()
 
-    cursor.execute(
-        "SELECT qualification, branch FROM users WHERE username=?",
-        (username,)
+    cur.execute(
+        "SELECT * FROM users WHERE username=? AND password=?",
+        (username, password)
     )
 
-    user = cursor.fetchone()
+    user = cur.fetchone()
+
     conn.close()
 
-    qualification = user[0]
-    branch = user[1]
+    if user:
+        session["user"] = username
+        return redirect("/dashboard")
 
-    jobs = []
+    return "Invalid Username or Password"
 
-    if qualification == "BTech":
+# ---------------- DASHBOARD ----------------
 
-        if branch == "CSE":
-            jobs = [
-                {
-                    "title": "NIC Scientist B",
-                    "link": "https://www.nielit.gov.in/"
-                },
-                {
-                    "title": "ISRO Scientist",
-                    "link": "https://www.isro.gov.in/"
-                },
-                {
-                    "title": "DRDO Engineer",
-                    "link": "https://www.drdo.gov.in/"
-                }
-            ]
+@app.route("/dashboard")
+def dashboard():
 
-        elif branch == "ECE":
-            jobs = [
-                {
-                    "title": "BSNL Junior Engineer",
-                    "link": "https://www.bsnl.co.in/"
-                },
-                {
-                    "title": "ISRO Technical Assistant",
-                    "link": "https://www.isro.gov.in/"
-                }
-            ]
+    if "user" not in session:
+        return redirect("/")
 
-        elif branch == "EEE":
-            jobs = [
-                {
-                    "title": "Power Grid Engineer",
-                    "link": "https://www.powergrid.in/"
-                },
-                {
-                    "title": "BHEL Engineer",
-                    "link": "https://www.bhel.com/"
-                }
-            ]
+    return render_template("dashboard.html")
 
-        else:
-            jobs = [
-                {
-                    "title": "SSC JE",
-                    "link": "https://ssc.nic.in/"
-                }
-            ]
+# ---------------- AI JOBS ----------------
 
-    elif qualification == "Degree":
+@app.route("/jobs", methods=["GET", "POST"])
+def jobs():
 
-        jobs = [
-            {
-                "title": "SSC CGL",
-                "link": "https://ssc.nic.in/"
-            },
-            {
-                "title": "Bank PO",
-                "link": "https://www.ibps.in/"
-            }
-        ]
+    recommended_jobs = []
 
-    elif qualification == "Intermediate":
+    if request.method == "POST":
 
-        jobs = [
-            {
-                "title": "Railway Clerk",
-                "link": "https://www.rrbcdg.gov.in/"
-            },
-            {
-                "title": "Police Constable",
-                "link": "https://www.tslprb.in/"
-            }
-        ]
+        branch = request.form["branch"]
 
-    else:
+        recommended_jobs = recommend_jobs(branch)
 
-        jobs = [
-            {
-                "title": "Group D",
-                "link": "https://www.rrbcdg.gov.in/"
-            }
-        ]
+    return render_template(
+        "jobs.html",
+        jobs=recommended_jobs
+    )
 
-    return render_template("jobs.html", jobs=jobs)
-
-
-# ================= LIVE JOBS ================= #
+# ---------------- LIVE JOBS ----------------
 
 @app.route("/livejobs")
 def livejobs():
 
-    live_jobs = get_live_jobs()
+    jobs = get_live_jobs()
 
     return render_template(
         "livejobs.html",
-        live_jobs=live_jobs
+        jobs=jobs
     )
 
-
-# ================= ROADMAP ================= #
+# ---------------- ROADMAP ----------------
 
 @app.route("/roadmap/<job_name>")
 def roadmap(job_name):
@@ -254,7 +131,8 @@ def roadmap(job_name):
         "Aptitude",
         "Reasoning",
         "General Knowledge",
-        "Technical Skills"
+        "Technical Skills",
+        "Communication Skills"
     ]
 
     books = [
@@ -269,6 +147,10 @@ def roadmap(job_name):
         {
             "name": "Reasoning Ability",
             "link": "https://www.amazon.in/"
+        },
+        {
+            "name": "Technical Interview Guide",
+            "link": "https://www.amazon.in/"
         }
     ]
 
@@ -279,18 +161,16 @@ def roadmap(job_name):
         books=books
     )
 
-
-# ================= LOGOUT ================= #
+# ---------------- LOGOUT ----------------
 
 @app.route("/logout")
 def logout():
 
-    session.pop("username", None)
+    session.pop("user", None)
 
     return redirect("/")
 
-
-# ================= RUN ================= #
+# ---------------- RUN APP ----------------
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
