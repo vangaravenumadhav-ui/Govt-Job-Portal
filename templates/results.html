@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<div class="container">
+    <h2>Recommended Jobs</h2>
+
+    {% for job in jobs %}
+        <div style="background:#f9f9f9; padding:10px; margin:10px; border-radius:10px;">
+            <h3>{{ job.title }}</h3>
+            <p>{{ job.desc }}</p>
+            <a href="{{ job.link }}" target="_blank">Apply Now</a>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Live Govt Jobs</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="jobs-container">
+
+    <h1>🌐 Live Government Jobs</h1>
+
+    {% for job in live_jobs %}
+
+    <div class="job-card">
+
+        <h2>{{ job.title }}</h2>
+
+        <a href="{{ job.link }}" target="_blank">
+            Open Notification
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

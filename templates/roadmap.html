@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roadmap</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="roadmap-container">
+
+    <h1>{{ job_name }} Roadmap</h1>
+
+    <div class="roadmap-card">
+
+        <h2>Skills Required</h2>
+
+        <ul>
+            {% for skill in skills %}
+            <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+
+    <div class="roadmap-card">
+
+        <h2>Recommended Books</h2>
+
+        {% for book in books %}
+
+        <div class="book-card">
+
+            <h3>{{ book.name }}</h3>
+
+            <a href="{{ book.link }}" target="_blank">
+                Buy Book
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
