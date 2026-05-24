@@ -5,7 +5,7 @@ body{
     background:
     linear-gradient(rgba(0,0,0,0.7),
     rgba(0,0,0,0.7)),
-    url("https://upload.wikimedia.org/wikipedia/commons/8/84/Seal_of_Telangana.svg");
+    url("/static/logo.png");
 
     background-size:300px;
     background-repeat:repeat;
