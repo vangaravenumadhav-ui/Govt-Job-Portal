@@ -7,7 +7,7 @@ body{
     rgba(0,0,0,0.85)),
     url("/static/logo.png");
 
-    background-size:70%;
+    background-size:100%;
     background-position:center;
     background-repeat:no-repeat;
     background-attachment:fixed;
