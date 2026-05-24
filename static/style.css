@@ -3,12 +3,13 @@ body{
     padding:0;
     font-family:Arial, sans-serif;
     background:
-    linear-gradient(rgba(0,0,0,0.7),
-    rgba(0,0,0,0.7)),
+    linear-gradient(rgba(0,0,0,0.85),
+    rgba(0,0,0,0.85)),
     url("/static/logo.png");
 
     background-size:300px;
-    background-repeat:repeat;
+    background-position:center;
+    background-repeat:no-repeat;
     background-attachment:fixed;
     color:white;
 }
