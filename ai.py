@@ -1,39 +1,38 @@
-def recommend_jobs(qualification, branch):
-
-    jobs = []
+def recommend_jobs(branch):
 
     branch = branch.lower()
 
-    if "cse" in branch:
-        jobs = [
-            {
-                "title": "Software Engineer",
-                "link": "https://www.ncs.gov.in/"
-            },
-            {
-                "title": "SSC CGL",
-                "link": "https://ssc.nic.in/"
-            }
-        ]
+    jobs = {
 
-    elif "ece" in branch:
-        jobs = [
-            {
-                "title": "ISRO",
-                "link": "https://www.isro.gov.in/"
-            },
-            {
-                "title": "DRDO",
-                "link": "https://drdo.gov.in/"
-            }
-        ]
+        "cse": [
+            "Software Engineer",
+            "Data Scientist",
+            "Cyber Security Officer"
+        ],
 
-    else:
-        jobs = [
-            {
-                "title": "Bank PO",
-                "link": "https://ibps.in/"
-            }
-        ]
+        "ece": [
+            "Electronics Engineer",
+            "ISRO Scientist",
+            "Communication Engineer"
+        ],
 
-    return jobs
+        "eee": [
+            "Electrical Engineer",
+            "Power Plant Engineer",
+            "Government Technician"
+        ],
+
+        "civil": [
+            "Civil Engineer",
+            "Site Engineer",
+            "Government Contractor"
+        ],
+
+        "mechanical": [
+            "Mechanical Engineer",
+            "Automobile Engineer",
+            "Production Engineer"
+        ]
+    }
+
+    return jobs.get(branch, ["No jobs found"])
