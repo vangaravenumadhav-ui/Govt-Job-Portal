@@ -5,34 +5,40 @@ def recommend_jobs(branch):
     jobs = {
 
         "cse": [
-            "Software Engineer",
-            "Data Scientist",
-            "Cyber Security Officer"
+            {
+                "title": "Software Engineer",
+                "apply_link": "https://www.linkedin.com/jobs/"
+            },
+
+            {
+                "title": "Data Scientist",
+                "apply_link": "https://www.naukri.com/data-scientist-jobs"
+            },
+
+            {
+                "title": "Cyber Security Officer",
+                "apply_link": "https://www.indeed.com/q-cyber-security-jobs.html"
+            }
         ],
 
         "ece": [
-            "Electronics Engineer",
-            "ISRO Scientist",
-            "Communication Engineer"
-        ],
+            {
+                "title": "Electronics Engineer",
+                "apply_link": "https://www.naukri.com/electronics-engineer-jobs"
+            },
 
-        "eee": [
-            "Electrical Engineer",
-            "Power Plant Engineer",
-            "Government Technician"
-        ],
-
-        "civil": [
-            "Civil Engineer",
-            "Site Engineer",
-            "Government Contractor"
+            {
+                "title": "ISRO Scientist",
+                "apply_link": "https://www.isro.gov.in/Careers.html"
+            }
         ],
 
         "mechanical": [
-            "Mechanical Engineer",
-            "Automobile Engineer",
-            "Production Engineer"
+            {
+                "title": "Mechanical Engineer",
+                "apply_link": "https://www.naukri.com/mechanical-engineer-jobs"
+            }
         ]
     }
 
-    return jobs.get(branch, ["No jobs found"])
+    return jobs.get(branch, [])

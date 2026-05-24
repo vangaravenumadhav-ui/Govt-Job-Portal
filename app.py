@@ -136,23 +136,28 @@ def roadmap(job_name):
     ]
 
     books = [
-        {
-            "name": "Quantitative Aptitude",
-            "link": "https://www.amazon.in/"
-        },
-        {
-            "name": "General Knowledge 2025",
-            "link": "https://www.amazon.in/"
-        },
-        {
-            "name": "Reasoning Ability",
-            "link": "https://www.amazon.in/"
-        },
-        {
-            "name": "Technical Interview Guide",
-            "link": "https://www.amazon.in/"
-        }
-    ]
+
+    {
+        "name": "Quantitative Aptitude RS Aggarwal",
+        "link": "https://www.amazon.in/s?k=rs+aggarwal+quantitative+aptitude"
+    },
+
+    {
+        "name": "General Knowledge 2025",
+        "link": "https://www.amazon.in/s?k=general+knowledge+2025"
+    },
+
+    {
+        "name": "Reasoning Ability",
+        "link": "https://www.amazon.in/s?k=reasoning+ability+book"
+    },
+
+    {
+        "name": "Technical Interview Guide",
+        "link": "https://www.amazon.in/s?k=technical+interview+guide"
+    }
+
+]
 
     return render_template(
         "roadmap.html",
